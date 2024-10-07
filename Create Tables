@@ -1,0 +1,97 @@
+CREATE DATABASE MegaTiendasSA
+USE MegaTiendasSA
+
+CREATE TABLE Clientes (
+	IdCliente INT not null PRIMARY KEY,
+	Nombre_Cliente VARCHAR(50) not null,
+	Cedula VARCHAR(15) not null UNIQUE,
+	Edad INT null,
+	Direccion VARCHAR(60) null,
+	Email VARCHAR(30) null,
+	Telefono VARCHAR(20) null,
+	Tipo VARCHAR(20) null,
+)
+
+CREATE TABLE Vendedor(
+	IdVendedor INT IDENTITY(1,1) not null PRIMARY KEY,
+	Nombre VARCHAR(50) not null,
+	Email VARCHAR(50) null,
+	Telefono VARCHAR(20) null,
+	Contrasena VARCHAR(20) not null
+)
+
+CREATE TABLE Sucursales(
+	IdSucursal INT IDENTITY(1,1) PRIMARY KEY not null,
+	Sucursal VARCHAR(20) not null
+)
+
+CREATE TABLE Producto(
+	IdProducto INT IDENTITY(100,1) PRIMARY KEY not null,
+	Nombre_Producto VARCHAR(30) not null,
+	Categoria VARCHAR(25) not null,
+	PrecioUnit MONEY not null,
+	Stock INT null
+)
+
+CREATE TABLE Fact_VentasD (
+	IdFacturaV INT IDENTITY(1000,1) not null PRIMARY KEY,
+	Fecha DATE not null,
+	IdCliente INT not null,
+	Total MONEY not null,
+	TotalDescuento MONEY null,
+	Impuesto SMALLMONEY not null,
+	TotalPagar MONEY not null,
+	
+	Foreign key (IdCliente) references Clientes(IdCliente)
+)
+
+CREATE TABLE DetallesFact_VentasD(
+	IdDetalleVD	INT IDENTITY(1,1) not null PRIMARY KEY,
+	IdFacturaV INT not null,
+	IdProducto INT not null,
+	PrecioUnit MONEY not null,
+	Cantidad SMALLINT not null,
+	Descuento FLOAT NULL,
+	Monto MONEY not null,
+
+	Foreign key (IdFacturaV) references Fact_VentasD(IdFacturaV),
+	Foreign key (IdProducto) references Producto(IdProducto)
+)
+
+CREATE TABLE Fact_Cotizacion (
+	IdFacturaC INT IDENTITY(2000,1) not null PRIMARY KEY,
+	Fecha DATE not null,
+	IdCliente INT not null,
+	Total MONEY not null,
+	TotalDescuento MONEY null,
+	Impuesto SMALLMONEY not null,
+	TotalPagar MONEY not null,
+	
+	Foreign key (IdCliente) references Clientes(IdCliente)
+)
+
+CREATE TABLE DetallesFact_Cotizacion(
+	IdDetalleC	INT IDENTITY(1,1) not null PRIMARY KEY,
+	IdFacturaC INT not null,
+	IdProducto INT not null,
+	PrecioUnit MONEY not null,
+	Cantidad SMALLINT not null,
+	Descuento FLOAT NULL,
+	Monto MONEY not null,
+
+	Foreign key (IdFacturaC) references Fact_Cotizacion(IdFacturaC),
+	Foreign key (IdProducto) references Producto(IdProducto)
+)
+
+
+ SELECT * FROM Clientes
+ SELECT * FROM Fact_VentasD
+ SELECT * FROM DetallesFact_VentasD
+ SELECT * FROM Producto
+ SELECT * FROM Vendedor
+ SELECT * FROM Sucursales
+ SELECT * FROM Fact_Cotizacion
+ SELECT * FROM DetallesFact_Cotizacion
+
+SELECT * FROM Sucursales
+SELECT * FROM Producto
